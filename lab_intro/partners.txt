@@ -1,0 +1,8 @@
+/**
+* @file partners.txt
+* mgau2
+* sa42
+* ndarand2
+*vdara2
+*sbagdi2
+*/
