@@ -12,4 +12,22 @@
 using namespace std;
 
 namespace cs225 {
+    HSLAPixel::HSLAPixel(){ // default constructor
+        h = 0.0;
+        s = 0.0;
+        l = 1.0;
+        a = 1.0;
+    }
+    HSLAPixel:: HSLAPixel(double hue, double saturation, double luminance){ // constructor with 3 arguments
+        h = hue; 
+        s = saturation; 
+        l = luminance; 
+        a = 1.0;
+    }
+    HSLAPixel:: HSLAPixel(double hue, double saturation, double luminance, double alpha){ // constructor with all 4 arguments
+        h = hue; 
+        s = saturation; 
+        l = luminance; 
+        a = alpha; 
+    }
 }
