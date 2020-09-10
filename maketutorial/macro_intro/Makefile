@@ -1,4 +1,4 @@
-CXX = clang++
+
 FLAGS = -O
 
 hello : hello_world.cpp
