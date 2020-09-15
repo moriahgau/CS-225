@@ -163,8 +163,8 @@ void Image::scale(double factor){
     PNG oldImage = PNG(*this);
     // std::cout<<"width"<< this->width()<< "height:" << this->height()<<std::endl;
     this->resize(oldImage.width() * factor, oldImage.height() * factor);
-    for (unsigned x = 0; x < this->width(); x++) {
-        for (unsigned y = 0; y < this->height(); y++) {
+    for (unsigned x = 0; x < width(); x++) {
+        for (unsigned y = 0; y < height(); y++) {
             HSLAPixel & pixel = oldImage.getPixel(x/factor, y/factor); // so this shouldn't be x, y then?
             HSLAPixel & newpixel = getPixel(x,y);
             newpixel = pixel;
@@ -189,7 +189,8 @@ void Image::scale(unsigned w, unsigned h){
     this->resize(w, h);
     for (unsigned x = 0; x < w; x++) {
         for (unsigned y = 0; y < h; y++) {
-            HSLAPixel & pixel = oldImage.getPixel(x/(w/width()), y/(h/height())); 
+            HSLAPixel & pixel = oldImage.getPixel(x/(w/oldImage.width()), y/(h/oldImage.height())); 
+            //adjusted line 192, test AG
             HSLAPixel & newpixel = getPixel(x,y);
             newpixel = pixel;
         }
