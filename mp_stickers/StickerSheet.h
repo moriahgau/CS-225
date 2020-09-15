@@ -3,5 +3,7 @@
  * Contains your declaration of the interface for the StickerSheet class.
  */
 #pragma once
+class StickerSheet{
 
+};
  
