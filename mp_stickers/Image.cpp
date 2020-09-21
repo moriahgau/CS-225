@@ -186,10 +186,13 @@ void Image::scale(unsigned w, unsigned h){
     //         newpixel = pixel;
     //     }
     // }
+    double newx  = w/oldImage.width();
+    double newy = h/oldImage.height();
+    double newz = w/h;
     this->resize(w, h);
     for (unsigned x = 0; x < w; x++) {
         for (unsigned y = 0; y < h; y++) {
-            HSLAPixel & pixel = oldImage.getPixel(x/(w/oldImage.width()), y/(h/oldImage.height())); 
+            HSLAPixel & pixel = oldImage.getPixel(x/newx, y/newy)); 
             //adjusted line 192, test AG
             HSLAPixel & newpixel = getPixel(x,y);
             newpixel = pixel;
