@@ -5,6 +5,7 @@
 #include "../cs225/HSLAPixel.h"
 
 using namespace cs225;
+using namespace std;
 
 static void checkStickerPlacement(const Image& sticker, const Image& sheet, const int& xOffset, const int& yOffset) {
   for (size_t x = 0; x < sticker.width(); ++x) {
@@ -227,9 +228,9 @@ TEST_CASE("A complex StickerSheet is correct", "[weight=5][part=2][timeout=30000
 }
 
 
-//
+
 // copy ctor
-//
+
 TEST_CASE("StickerSheet's copy constructor makes an independent copy", "[weight=2][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("tests/alma.png");
   Image i;    i.readFromFile("tests/i.png");
@@ -268,7 +269,7 @@ TEST_CASE("StickerSheet's assignment operator makes an independent copy", "[weig
 
 //
 // out of bounds with sanity checks
-//
+
 TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries works", "[weight=5][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("tests/alma.png");
   Image i;    i.readFromFile("tests/i.png");

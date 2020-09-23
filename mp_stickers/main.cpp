@@ -9,8 +9,8 @@ int main() {
   sticker_3.readFromFile("pusheen.png");
   StickerSheet final(base, 7);
   final.addSticker(sticker_1, 10,10);
-  final.addSticker(sticker_2, 500,10);
-  final.addSticker(sticker_3, 10,550);
+  final.addSticker(sticker_2, 720,750);
+  final.addSticker(sticker_3, 10,750);
   Image outputted = final.render();
   outputted.writeToFile("myImage.png");
 
