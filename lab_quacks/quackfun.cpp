@@ -115,16 +115,18 @@ void scramble(queue<T>& q)
     T temp;
 
     // Your code here
-    int count = 1; 
+    unsigned count = 1; 
     while(q.empty() == false){
-        if(count%2 == 0){
-            for(int i = 0; i < count; i++){
+        if(count%2 == 0){ // since popping, must check that loop doesn't access nonexisting memory
+             if (q.size() < count)
+                    count = q.size();
+            for(unsigned int i = 0; i < count; i++){
                 s.push(q.front());
                 //std::cout <<"got here"<<std::endl;
                 q.pop();
                 //std::cout <<"here_2"<<std::endl;
             }
-            for(int i = 0; i < count; i++){
+            for(unsigned i = 0; i < count; i++){
                 q2.push(s.top());
                 //std::cout <<"there"<<std::endl;
                 s.pop();
@@ -132,7 +134,9 @@ void scramble(queue<T>& q)
             }
         }
         else if(count%2 == 1){
-            for (int i = 0; i < count; i++){
+            if (q.size() < count)
+                    count = q.size();
+            for (unsigned int i = 0; i < count; i++){
                 s.push(q.front());
                 //std::cout <<"got here"<<std::endl;
                 q.pop();
@@ -148,6 +152,5 @@ void scramble(queue<T>& q)
 
     //std::cout <<"got here"<<std::endl; //segfault happening here
     q = q2;
-    std::cout <<"got here"<<std::endl;
 }
 }
