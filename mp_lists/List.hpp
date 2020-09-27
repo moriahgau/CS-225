@@ -8,7 +8,7 @@ List<T>::List() {
   // @TODO: graded in MP3.1
     ListNode* head_ = NULL;
     ListNode* tail_ = NULL;
-}
+}// not sure what to do here? 
 
 /**
  * Returns a ListIterator with a position at the beginning of
@@ -17,7 +17,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -29,7 +29,6 @@ typename List<T>::ListIterator List<T>::end() const {
   return List<T>::ListIterator(NULL);
 }
 
-
 /**
  * Destroys all dynamically allocated memory associated with the current
  * List class.
@@ -37,7 +36,19 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
+  ListNode *currentnode = head_;
+  while(currentnode != NULL){
+    ListNode *nextnode = currentnode->next;
+    delete currentnode; 
+    currentnode = nextnode;
+    length_--;
+  }
+  head_ = NULL;
+  tail_ = NULL;
+  length_ =0;
+
 }
+
 
 /**
  * Inserts a new node at the front of the List.
@@ -48,22 +59,24 @@ void List<T>::_destroy() {
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
-  ListNode * newNode = new ListNode(ndata);
-  newNode -> next = head_;
-  newNode -> prev = NULL;
-  
-  if (head_ != NULL) {
-    head_ -> prev = newNode;
+  ListNode * newNode = new ListNode(ndata); // need to delete in destructor to avoid leak? 
+  if(head_ != nullptr){
+    newNode -> next = head_;
+    newNode -> prev = NULL;
+    head_->prev = newNode;
+    head_ = newNode; 
   }
-  if (tail_ == NULL) {
+  
+  else{
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    head_ = newNode;
     tail_ = newNode;
-  }
-  
+  }  
 
   length_++;
 
 }
-
 /**
  * Inserts a new node at the back of the List.
  * This function **SHOULD** create a new ListNode.
@@ -73,6 +86,20 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
+  ListNode * newNode = new ListNode(ndata); // need to delete in destructor to avoid leak? 
+  if(tail_ != nullptr){
+    newNode -> next = NULL;
+    newNode -> prev = tail_;
+    tail_->next = newNode;
+    tail_ = newNode; 
+  }
+  else{
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    head_ = newNode;
+    tail_ = newNode;
+  }  
+  length_++;
 }
 
 /**

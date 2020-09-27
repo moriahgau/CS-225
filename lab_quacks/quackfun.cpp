@@ -29,9 +29,18 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
+    if(s.size() == 0)
+        return T();
+    else{
+        T temp = s.top(); 
+        s.pop();
+        T totalsum = temp + sum(s);
+        s.push(temp);
+        return totalsum;
 
+    }
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    // return T(); // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -55,9 +64,32 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
-
+    stack<char> s;
     // @TODO: Make less optimistic
-    return true;
+    int checkbalance = 0;
+    while (input.empty() == false){
+        char x = input.front();
+        if(x == '['){
+            checkbalance++; 
+        }
+        else if (x == ']'){
+            checkbalance--;
+        }
+
+        if (checkbalance < 0){
+            return false;
+        }
+        input.pop();
+        
+    }
+    if (checkbalance == 0){
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    
 }
 
 /**
@@ -79,8 +111,43 @@ template <typename T>
 void scramble(queue<T>& q)
 {
     stack<T> s;
-    // optional: queue<T> q2;
+    queue<T> q2;
+    T temp;
 
     // Your code here
+    int count = 1; 
+    while(q.empty() == false){
+        if(count%2 == 0){
+            for(int i = 0; i < count; i++){
+                s.push(q.front());
+                //std::cout <<"got here"<<std::endl;
+                q.pop();
+                //std::cout <<"here_2"<<std::endl;
+            }
+            for(int i = 0; i < count; i++){
+                q2.push(s.top());
+                //std::cout <<"there"<<std::endl;
+                s.pop();
+                //std::cout <<"hello"<<std::endl;
+            }
+        }
+        else if(count%2 == 1){
+            for (int i = 0; i < count; i++){
+                s.push(q.front());
+                //std::cout <<"got here"<<std::endl;
+                q.pop();
+                //std::cout <<"here"<<std::endl;
+                q2.push(s.top());
+                //std::cout <<"always here"<<std::endl;
+                s.pop();
+               // std::cout <<"appear"<<std::endl;
+            }
+        }
+        count++;
+    };
+
+    //std::cout <<"got here"<<std::endl; //segfault happening here
+    q = q2;
+    std::cout <<"got here"<<std::endl;
 }
 }
