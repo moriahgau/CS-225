@@ -103,6 +103,31 @@ void List<T>::insertBack(const T & ndata) {
   length_++;
 }
 
+// template <typename T>
+// typename List< T >::split(int splitPoint){
+// List<T> secondlist;
+// int pastlength = length_;
+// if (splitPoint > length_)
+// 	return List<T>();
+// if else (splitPoint < 0)
+// 	splitPoint = 0;
+// ListNode * headtwo= split(head_, splitPoint);
+// secondlist.length_ = pastlength - splitPoint;
+// if(headtwo == head_){
+// 	headtwo = NULL;
+// 	secondlist.head_ = headtwo;
+// 	secondlist.tail_ = NULL;
+// 	secondlist.length_ = 0;
+// }
+// else{
+// 	secondlist.tail_ = headtwo;
+// 	secondlist.head = headtwo;
+// 	while(secondlist.tail_->next != NULL)
+// 		secondlist.tail_ = secondlist.tail_->next;
+// 	}
+// return secondlist;
+// }
+
 /**
  * Helper function to split a sequence of linked memory at the node
  * splitPoint steps **after** start. In other words, it should disconnect
@@ -121,19 +146,17 @@ void List<T>::insertBack(const T & ndata) {
  */
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
-  /// @todo Graded in MP3.1
+  /// @todo Graded in MP3.1 // do I need to check if curr is NULL? 
   ListNode * curr = start;
-
-  for (int i = 0; i < splitPoint || curr != NULL; i++) {
+// if (splitPoint >= length_)
+// 	return curr; //  a,b,c,d 5
+  for (int i = 0; i < splitPoint; i++ ) {
     curr = curr->next;
   }
-
-  if (curr != NULL) {
-      curr->prev->next = NULL;
-      curr->prev = NULL;
-  }
-
-  return NULL;
+  tail_ = curr->prev;
+  curr->prev->next = NULL;
+  curr->prev = NULL;
+  return curr;
 }
 
 /**
@@ -145,10 +168,70 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   * on the last 1 or 2 elements.
   * 
   * You may NOT allocate ANY new ListNodes!
-  */
+  */   
 template <typename T>
 void List<T>::tripleRotate() {
-  // @todo Graded in MP3.1
+  //@todo Graded in MP3.1
+  //int count = 1; // a,b,c —> b,c,a
+  ListNode *tempa = nullptr;
+  ListNode *tempb = nullptr;
+  ListNode *tempc = nullptr;
+  ListNode *tempbprevious = nullptr;
+  ListNode *individualhead = head_;
+  //while(individualhead != NULL){	
+  while (true){
+   //if(count%3 == 0){  // while loop instead? for a,b,c   ,d,e,f,   g; b,c,a, e,f,d
+    //if(length_ - count >3){
+      //for(i = individualhead; i < count + 3; i++){
+        //individualhead->prev = individualhead->next->next->next; //not sure how to connect a to e here
+        if (individualhead!=NULL)
+          tempa = individualhead; 
+        else
+        {
+            return;
+        }
+        
+        if (individualhead->next!=NULL){
+          tempb = individualhead->next;
+        }
+        else
+        {
+          return;
+        }
+        
+        if (individualhead->next->next!=NULL)
+          tempc = tempb->next;
+        else
+        {
+          return;
+        }
+        if(tempa == head_)
+          head_ = head_->next;
+        //now rearrange, infinite loop starts: a,b,c,d,e,f,g --   b,c,a,   e,f,d, g
+        
+        //tempa->prev = tempbprevious;
+        //tempbprevious = tempa;
+        if (tempbprevious != NULL)
+          tempbprevious->next = tempb;
+        tempa->prev = tempc;
+        tempa->next = tempc->next;
+        if (tempc->next !=NULL)
+          tempc->next->prev = tempa;
+        tempc->next = tempa;
+        tempc->prev = tempb;
+        tempb->next = tempc;
+        tempb->prev = tempbprevious;
+        individualhead = tempa->next;;
+        tempbprevious = tempa;
+        
+        
+        
+
+      // a to e
+      // count = count + 3;
+      //cout <<*this<<endl;
+    //}
+  }
 }
 
 
@@ -245,3 +328,4 @@ typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength
   /// @todo Graded in MP3.2
   return NULL;
 }
+
