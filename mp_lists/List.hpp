@@ -148,9 +148,13 @@ template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1 // do I need to check if curr is NULL? 
   ListNode * curr = start;
-// if (splitPoint >= length_)
-// 	return curr; //  a,b,c,d 5
-  for (int i = 0; i < splitPoint; i++ ) {
+if (splitPoint >= length_)
+	return NULL; //  a,b,c,d 5
+else if (splitPoint == 0)
+  return head_;
+for (int i = 0; i < splitPoint; i++ ) {
+    if(curr == NULL)
+      return NULL;
     curr = curr->next;
   }
   tail_ = curr->prev;
