@@ -136,20 +136,53 @@ bool BinaryTree<T>::isOrderedRecursivehelper(const Node* subRoot) const{
     // compare root, left, right, recursive
     // Node* max = subRoot;
     // Node* min = subRoot;
-
-    if (subRoot != NULL){
-        if (subRoot->left != NULL){
-            if (subRoot->elem < subRoot->left->elem || subRoot->left->right > subRoot)
-                return false;
-        }
-        if (subRoot->right != NULL){
-            if (subRoot->elem > subRoot->right->elem || subRoot->right->left < subRoot)
-                return false;
-        }
-        isOrderedRecursivehelper(subRoot->left);
-        isOrderedRecursivehelper(subRoot->right);
-    } 
-
+    // checking leftmost of the right node and rightmost of the left node
+    //if (subRoot != NULL){
+        // if (subRoot->left != NULL){
+        //     subRoot = subRoot->right;
+        //     // if (subRoot->elem < subRoot->left->elem)
+        //     //     return false;
+        // }
+        // if (subRoot->elem < subRoot->left->elem)
+        //     return false;
+        // if (subRoot->right != NULL){
+        //     if (subRoot->elem > subRoot->right->elem)
+        //         return false;
+        // }
+        // isOrderedRecursivehelper(subRoot->left);
+        // isOrderedRecursivehelper(subRoot->right);
+        // return helper(current->left) && helper(current->right);
+    // } 
+    // return true;
+    if (subRoot->right != NULL){
+        if (leftmosthelper(subRoot->right)->elem < subRoot->elem)
+            return false;
+    }
+    if (subRoot ->left != NULL){
+        if (rightmosthelper(subRoot->left)->elem > subRoot->elem)
+            return false;
+    }
+    if (subRoot->left != NULL && subRoot ->right != NULL){
+        if (!isOrderedRecursivehelper(subRoot->left) || !isOrderedRecursivehelper(subRoot->right))
+         return false;
+    }
     return true;
 }
 
+template <typename T>
+typename BinaryTree<T>::Node* BinaryTree<T>::leftmosthelper(typename BinaryTree<T>::Node *subRoot) const{
+    if (subRoot == NULL)
+        return NULL;
+    else if (subRoot ->left == NULL)
+        return subRoot;
+    return leftmosthelper(subRoot->left);
+}
+
+template <typename T>
+typename BinaryTree<T>::Node* BinaryTree<T>::rightmosthelper(typename BinaryTree<T>::Node *subRoot) const{
+    if (subRoot == NULL)
+        return NULL;
+    else if (subRoot ->right == NULL)
+        return subRoot;
+    return leftmosthelper(subRoot->right);
+}

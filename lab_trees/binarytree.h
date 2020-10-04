@@ -137,6 +137,8 @@ class BinaryTree
          */
         bool isOrderedRecursive() const;
         bool isOrderedRecursivehelper(const Node* subRoot) const;
+        Node* leftmosthelper(typename BinaryTree<T>::Node *subRoot) const;
+        Node* rightmosthelper(typename BinaryTree<T>::Node *subRoot) const;
         /**
          *  Uses vector to store values of the nodes of a binary tree in order.
          * That is, everything to the left of a node will be pushed before that

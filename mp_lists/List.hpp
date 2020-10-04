@@ -261,6 +261,36 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.2
+  ListNode *head = startPoint;
+  ListNode *tail = endPoint;
+  ListNode *beforeoldhead = startPoint->prev;
+  ListNode *afteroldtail = endPoint ->next;
+
+  if (startPoint == NULL  || endPoint == NULL)
+    return;
+  if (startPoint == endPoint)
+    return;
+  while (head != afteroldtail){ // swapping the directions in the list
+    ListNode *temp = NULL;
+    temp = head->prev;
+    head->prev = head->next;
+    head->next = temp;
+    head = head->next;
+  }
+  startPoint = endPoint;
+  cout << "got here" <<endl;
+  endPoint = head;
+  if(startPoint != NULL)
+    startPoint->prev = beforeoldhead;
+  cout << "got there" <<endl;
+  if(beforeoldhead->next != NULL)
+    beforeoldhead->next = startPoint;
+  cout << "got there second" <<endl;
+  if (endPoint ->next != NULL)
+    endPoint->next = afteroldtail;
+  cout << "got there third" <<endl;
+  if(afteroldtail->prev != NULL)
+    afteroldtail->prev = endPoint;
 }
 
 /**
@@ -272,6 +302,21 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.2
+  if (n > length_)
+    reverse();
+  else if (n == 1 | n == 0)
+    return;
+   Node *start = head_; 
+   Node *temp = head_;
+   while (start != NULL){  // should this be NULL? what if there's a list afterwards
+     for (int i = 0; i < n-1; i++){
+       
+       reverse(start, temp);
+           temp = temp->next;
+    // or temp = temp->next ? 
+     }
+   }
+   
 }
 
 
@@ -313,8 +358,39 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
-  return NULL;
-}
+  if (firsthead == NULL)
+    return secondhead;
+  else if (secondhead == NULL)
+    return firsthead;
+  Node* first = firsthead;
+  Node* second = secondhead;
+  Node* curr = NULL;
+  if (first ->data < second->data) // however all of this is assumign smallest number is in first element?
+    curr = first;
+  else
+    curr = second;
+  Node *temphead = curr; 
+  while (first != NULL && ){
+    if (first ->data < second->data){
+      curr = first;
+      first = first->next;
+     }
+    else
+    {
+     curr = second;
+      second = second->next;
+    }
+  }
+  if (first != NULL && second == NULL){
+    curr->next = first;
+    first->prev = curr;
+  }
+  else if (first == NULL && second != NULL){
+    curr->next = second;
+    second->prev = curr;
+  }
+  return temphead; // assigning back to the new head
+  }
 
 /**
  * Sorts a chain of linked memory given a start node and a size.
@@ -327,9 +403,12 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
  * @param chainLength Size of the chain to be sorted.
  * @return A pointer to the beginning of the now sorted chain.
  */
-template <typename T>
+template <typename T> // is this the helper function we make or is there another one? do we make one called sort?
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
+
   return NULL;
+
 }
+
 
