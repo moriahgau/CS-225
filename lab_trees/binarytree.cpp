@@ -5,7 +5,7 @@
  */
 #include "TreeTraversals/InorderTraversal.h"
 #include <iostream>
-
+using namespace std;
 /**
  * @return The height of the binary tree. Recall that the height of a binary
  *  tree is just the length of the longest path from the root to a leaf, and
@@ -75,12 +75,27 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
  */
-    template <typename T>
+template <typename T>
 void BinaryTree<T>::mirror()
 {
     //your code here
-}
+    mirrorhelper(root);
 
+}
+// helper function for mirror()
+template <typename T>
+void BinaryTree<T>::mirrorhelper(Node* subRoot){
+    if (subRoot == NULL)
+        return;
+    
+    Node *oldright = subRoot->right;
+    subRoot->right = subRoot->left;
+    subRoot->left = oldright;
+   
+    mirrorhelper(subRoot->left);
+    mirrorhelper(subRoot->right);
+}
+    
 
 /**
  * isOrdered() function iterative version
@@ -91,8 +106,15 @@ void BinaryTree<T>::mirror()
 template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
-    // your code here
-    return false;
+    InorderTraversal <int> traversal(this->getRoot());
+    Node * prev = NULL;
+    for (auto it = traversal.begin(); it != traversal.end(); ++it) {
+        if(prev != NULL && prev->elem > (*it)->elem)
+            return false;
+        prev = (*it);
+    }
+    return true;
+    
 }
 
 /**
@@ -105,6 +127,29 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
-    return false;
+    return isOrderedRecursivehelper(root);
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursivehelper(const Node* subRoot) const{
+    //consider keeping track of the largest and smallest element seen so far;
+    // compare root, left, right, recursive
+    // Node* max = subRoot;
+    // Node* min = subRoot;
+
+    if (subRoot != NULL){
+        if (subRoot->left != NULL){
+            if (subRoot->elem < subRoot->left->elem || subRoot->left->right > subRoot)
+                return false;
+        }
+        if (subRoot->right != NULL){
+            if (subRoot->elem > subRoot->right->elem || subRoot->right->left < subRoot)
+                return false;
+        }
+        isOrderedRecursivehelper(subRoot->left);
+        isOrderedRecursivehelper(subRoot->right);
+    } 
+
+    return true;
 }
 
