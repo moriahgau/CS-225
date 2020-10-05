@@ -12,7 +12,23 @@
 #include "../List.h"
 
 using namespace cs225;
+// TEST_CASE("List::reverse", "[weight=5][part=2]") {
+  //  List<int> list;
 
+  //   list.insertBack(3);
+  //   list.insertBack(2);
+  //   list.insertBack(1);
+  //   list.insertFront(3);
+  //   list.insertFront(2);
+  //   list.insertFront(1);
+
+// //   // cout << list.print() << endl;
+
+// //   // cout << list.print() << endl;
+// //   for(List<unsigned>::ListIterator iter=list.begin();iter !=end();iter++) cout << *iter<< endl;
+// //   list.reverse();
+// list.reverse();
+// }
 
 TEST_CASE("List::reverse", "[weight=5][part=2]") {
   PNG in;        in.readFromFile("tests/alma.png");
@@ -23,7 +39,16 @@ TEST_CASE("List::reverse", "[weight=5][part=2]") {
   PNG out = listToImage(list, in.width(), in.height());
   out.writeToFile("actual-reverse.png");
   INFO("Output image `out` saved as actual-reverse.png");
+  // List<int> slist;  List<int> flist;
 
+  //   // slist.insertFront(1); 
+  //   // slist.insertFront(2);
+  //   // slist.insertFront(3);
+  //   // slist.insertFront(4);
+  //   // slist.insertFront(5);
+  //   // slist.insertFront(6);
+  //   // slist.reverse();
+  //   // REQUIRE(1);
   REQUIRE( out == expected );
 }
 
@@ -37,7 +62,17 @@ TEST_CASE("List::reverseNth #1", "[weight=5][part=2]") {
   PNG out = listToImage(list, in.width(), in.height());
   out.writeToFile("actual-reverseN_1.png");
   INFO("Output image `out` saved as actual-reverseN_1.png");
+//  List<int> slist;  List<int> flist;
 
+//     slist.insertFront(1); 7,6,5,4,3,2,1
+//     slist.insertFront(2);
+//     slist.insertFront(3);
+//     slist.insertFront(4);
+//     slist.insertFront(5);
+//     slist.insertFront(6);
+//     slist.insertFront(7);
+//     slist.reverseNth(3);
+//     REQUIRE(1);
   REQUIRE( out == expected );
 }
 
@@ -88,6 +123,24 @@ TEST_CASE("List::merge", "[weight=10][part=2][valgrind]") {
   INFO("Output image `out` saved as actual-merge.png");
 
   REQUIRE( out == expected );
+  //  List<int> slist;  List<int> flist;
+
+  //   flist.insertBack(1); //7,6,5,4,3,2,1
+  //   flist.insertBack(2);
+  //   flist.insertBack(3);
+
+
+  //   slist.insertBack(4);
+  //   slist.insertBack(5);
+  //   slist.insertBack(6);
+  //   slist.insertBack(7);
+  //   slist.mergeWith(flist);
+
+  //   stringstream s;
+  //   slist.print(s);
+  //   REQUIRE(1);
+
+
 }
 
 TEST_CASE("List::sort simple #1", "[weight=2][part=2][valgrind]") {
