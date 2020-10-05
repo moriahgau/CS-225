@@ -132,28 +132,7 @@ bool BinaryTree<T>::isOrderedRecursive() const
 
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursivehelper(const Node* subRoot) const{
-    //consider keeping track of the largest and smallest element seen so far;
-    // compare root, left, right, recursive
-    // Node* max = subRoot;
-    // Node* min = subRoot;
     // checking leftmost of the right node and rightmost of the left node
-    //if (subRoot != NULL){
-        // if (subRoot->left != NULL){
-        //     subRoot = subRoot->right;
-        //     // if (subRoot->elem < subRoot->left->elem)
-        //     //     return false;
-        // }
-        // if (subRoot->elem < subRoot->left->elem)
-        //     return false;
-        // if (subRoot->right != NULL){
-        //     if (subRoot->elem > subRoot->right->elem)
-        //         return false;
-        // }
-        // isOrderedRecursivehelper(subRoot->left);
-        // isOrderedRecursivehelper(subRoot->right);
-        // return helper(current->left) && helper(current->right);
-    // } 
-    // return true;
     if (subRoot->right != NULL){
         if (leftmosthelper(subRoot->right)->elem < subRoot->elem)
             return false;
@@ -162,9 +141,17 @@ bool BinaryTree<T>::isOrderedRecursivehelper(const Node* subRoot) const{
         if (rightmosthelper(subRoot->left)->elem > subRoot->elem)
             return false;
     }
-    if (subRoot->left != NULL && subRoot ->right != NULL){
-        if (!isOrderedRecursivehelper(subRoot->left) || !isOrderedRecursivehelper(subRoot->right))
-         return false;
+    // if (subRoot->left != NULL && subRoot ->right != NULL){ // does this work for all cases? 
+    //     if (!isOrderedRecursivehelper(subRoot->left) || !isOrderedRecursivehelper(subRoot->right))
+    //      return false;
+    // } // or have to split into ... otherwise not checking through every single node?
+    if (subRoot ->left != NULL){
+        if (!isOrderedRecursivehelper(subRoot->left))
+            return false;
+    }
+    if (subRoot ->right != NULL){
+        if (!isOrderedRecursivehelper(subRoot->right))
+            return false;
     }
     return true;
 }

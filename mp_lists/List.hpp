@@ -310,10 +310,8 @@ void List<T>::reverseNth(int n) {
    Node *temp = head_;
    while (start != NULL){  // should this be NULL? what if there's a list afterwards
      for (int i = 0; i < n-1; i++){
-       
-       reverse(start, temp);
-           temp = temp->next;
-    // or temp = temp->next ? 
+        reverse(start, temp);
+        temp = temp->next;
      }
    }
    
@@ -365,7 +363,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   Node* first = firsthead;
   Node* second = secondhead;
   Node* curr = NULL;
-  if (first ->data < second->data) // however all of this is assumign smallest number is in first element?
+  if (first ->data < second->data) // however all of this is assuming smallest number is in first element?
     curr = first;
   else
     curr = second;
@@ -406,9 +404,10 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T> // is this the helper function we make or is there another one? do we make one called sort?
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
-
-  return NULL;
-
+  if(start == NULL || start->next == NULL)
+    return start;
+  ListNode * second = split(start, chainLength/2);
+  return merge(mergesort(start, chainLength/2), mergesort(second, chainLength-chainLength/2));
 }
 
 
