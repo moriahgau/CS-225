@@ -48,7 +48,6 @@ void encoder::encodeFile(const string& inputName, const string& outputName,
     ifstream input(inputName);
     stringstream ss;
     ss << input.rdbuf();
-
     HuffmanTree tree(getFrequencies(ss.str()));
     BinaryFileWriter output(outputName);
     BinaryFileWriter treeFile(treeName);
