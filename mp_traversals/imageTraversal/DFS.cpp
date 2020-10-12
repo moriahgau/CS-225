@@ -24,6 +24,10 @@
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+  png_ = png;
+  start_ = start;
+  tolerance_ = tolerance;
+  s_.push(start_);
 }
 
 /**
@@ -31,15 +35,14 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(this, png_, start_, tolerance_); 
 }
-
 /**
  * Returns an iterator for the traversal one past the end of the traversal.
  */
-ImageTraversal::Iterator DFS::end() {
+ImageTraversal::Iterator DFS::end(){
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(); // would this be an empty constructor? 
 }
 
 /**
@@ -47,6 +50,7 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
+  s_.push(point);
 }
 
 /**
@@ -54,21 +58,23 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point x = s_.top();
+  s_.pop();
+  return x;
 }
 
 /**
  * Returns the current Point in the traversal.
  */
 Point DFS::peek() const {
-  /** @todo [Part 1] */
-  return Point(0, 0);
+  /** @todo [Part 1] */ //return the currentpoint
+  return s_.top();
 }
 
 /**
  * Returns true if the traversal is empty.
  */
 bool DFS::empty() const {
-  /** @todo [Part 1] */
-  return true;
+  /** @todo [Part 1] */ // check if empty 
+  return s_.empty();
 }
