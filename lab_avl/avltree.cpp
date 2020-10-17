@@ -157,20 +157,28 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
             while (iop->right != NULL)
               iop = iop ->right;
             swap(subtree, iop);
-            delete subtree;
-            subtree = NULL;
-        } else {
+            remove(subtree->left, key); 
+            // delete subtree;
+            // subtree = NULL;
+        } 
+        else {
             /* one-child remove */
             // your code here
             if (subtree->right != NULL && subtree->left == NULL)
-              swap(subtree, subtree->right);
-            else
-              swap(subtree, subtree->left);
-            delete subtree;
-            subtree = NULL;
-        }
+              {
+                Node *temp = subtree; 
+                subtree = subtree->left;
+                delete temp;
+              }
+            else{
+              Node *temp = subtree; 
+              subtree = subtree->right;
+              delete temp;
+            // subtree = NULL;
+            }
         // your code here
         // rebalance(subtree);
+      }
     }
     rebalance(subtree); // because recursion? want to rebalance every time? 
     // gdb? 
