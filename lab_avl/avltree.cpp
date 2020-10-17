@@ -166,12 +166,12 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
             if (subtree->right != NULL && subtree->left == NULL)
               {
                 Node *temp = subtree; 
-                subtree = subtree->left;
+                subtree = subtree->right;
                 delete temp;
               }
             else{
               Node *temp = subtree; 
-              subtree = subtree->right;
+              subtree = subtree->left;
               delete temp;
             // subtree = NULL;
             }
@@ -179,6 +179,5 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
         // rebalance(subtree);
       }
     }
-    rebalance(subtree); // because recursion? want to rebalance every time? 
-    // gdb? 
+    rebalance(subtree); // because recursion,  want to rebalance every time
 }
