@@ -18,7 +18,10 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
-}
+  png_ = png;
+  traversal_.clear();
+  colorPicker_.clear();
+  }
 
 /**
  * Adds a FloodFill operation to the FloodFillImage.  This function must store the operation,
@@ -29,6 +32,9 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
+  // what does it mean that this function must store the operation? Implying that we'd need a stack or queue? 
+  traversal_.push_back(&traversal);
+  colorPicker_.push_back(&colorPicker);
 }
 
 /**
@@ -53,5 +59,21 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+  // not entirely sure what they're trying to ask us to do?
+  PNG copypng = png_; 
+  //animation.addFrame(copypng); //don't need this since initial frame covered in the loop? 
+  int counter = 0;
+  for (unsigned i = 0; i < traversal_.size(); i ++){
+    for (ImageTraversal:: Iterator iterate = traversal_[i]->begin(); iterate != traversal_[i]->end(); ++iterate){
+        if (counter % frameInterval == 0){
+          animation.addFrame(copypng);
+        }
+        counter ++;
+        HSLAPixel & pixel = copypng.getPixel((*iterate).x, (*iterate).y); //according to iterator;
+        pixel = colorPicker_[i]->getColor((*iterate).x, (*iterate).y);  //color pickervalue;
+    }
+  }
+  if (counter % frameInterval != 0) // not sure if want/don't want double count if last frame is multiple of interval
+    animation.addFrame(copypng); 
   return animation;
 }

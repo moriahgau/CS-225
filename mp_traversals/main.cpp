@@ -26,7 +26,18 @@ int main() {
   lastFrame.writeToFile("myFloodFill.png");
   animation.write("myFloodFill.gif");
   */
-
-
+  PNG png;
+  png.readFromFile("gudetama.png");
+  FloodFilledImage image(png);
+  BFS bfs(png, Point(240, 210), 0.05);
+  DFS dfs(png, Point(50, 50), 0.1);
+  MyColorPicker color1(50, 0.005);
+  MyColorPicker color2(0.05, 0.025);
+  image.addFloodFill(bfs, color1);
+  image.addFloodFill(dfs, color2);
+  Animation animation = image.animate(1000);
+  PNG lastFrame = animation.getFrame( animation.frameCount() - 1 );
+  lastFrame.writeToFile("myFloodFill.png");
+  animation.write("myFloodFill.gif");
   return 0;
 }

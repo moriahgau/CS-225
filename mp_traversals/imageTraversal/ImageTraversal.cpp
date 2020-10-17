@@ -133,7 +133,7 @@ void ImageTraversal::Iterator::adding(Point newpoint){
  *
  * Advances the traversal of the image.
  */
-ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
+ImageTraversal::Iterator & ImageTraversal::Iterator::operator++(){
   /** @todo [Part 1] */
   // pop, check checks--> assign the current point to this new point, call adding function and add this current point to the bool visited array, then return *this
   // also need to make sure that the traversal isn't empty
