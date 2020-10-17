@@ -120,7 +120,6 @@ void AVLTree<K, V>::insert(Node*& subtree, const K& key, const V& value)
       insert(subtree->left,key,value);
     else if (key > subtree->key)
       insert(subtree->right,key,value);
-
     rebalance(subtree);
 }
 
