@@ -4,6 +4,7 @@
  */
 
 #include <utility>
+#include <cmath>
 #include <algorithm>
 
 using namespace std;
@@ -15,8 +16,14 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
     /**
      * @todo Implement this function!
      */
-
-    return false;
+    if (curDim < 0 || curDim >= Dim)
+      return false;
+    if (first[curDim] < second[curDim])
+      return true;
+    else if (first[curDim] == second[curDim])
+      return first<second;
+    else 
+      return false;
 }
 
 template <int Dim>
@@ -27,8 +34,18 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     /**
      * @todo Implement this function!
      */
-
-     return false;
+    double curr_distance = 0;
+    double pot_distance = 0;
+    for (int i = 0; i < Dim; i++){
+      curr_distance = curr_distance + (target[i] - curretBest[i])*(target[i] - curretBest[i]);
+      pot_distance = pot_distance + (target[i] - potential[i])*(target[i] - potential[i]);
+    }
+    if(pot_distance < curr_distance)
+      return true;
+    else if(pot_distance == curr_distance)
+      return potential<currentBest;
+    else
+      return false;
 }
 
 template <int Dim>

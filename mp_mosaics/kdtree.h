@@ -248,6 +248,7 @@ class KDTree
     /** Internal representation, root and size **/
     KDTreeNode *root;
     size_t size;
+    vector<Point<Dim>> tpoints;
 
     /** Helper function for grading */
     int getPrintData(KDTreeNode * subroot) const;
