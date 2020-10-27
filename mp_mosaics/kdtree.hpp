@@ -194,7 +194,6 @@ Point<Dim> KDTree<Dim>::fNN_helper(const Point<Dim>& query, KDTreeNode * subroot
     }
     double distance = radius(query, best);
     double splitplane = ((subroot->point[dimension])-query[dimension])*((subroot->point[dimension])-query[dimension]); // not sure how to calculate this? need to somehow connect to query
-    cout << "splitplane" << splitplane << endl;
     if (splitplane <= distance){ // do i need to make another else if (splitplane == distance) where best < subroot->point? 
       Point <Dim> check = subroot->point;
       if (smallerDimVal(query, subroot->point, dimension)){
