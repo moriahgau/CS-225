@@ -158,6 +158,7 @@ class KDTree
      *
      * @param other The KDTree to copy.
      */
+    KDTreeNode * buildTree(int start, int end, int dimension);
     KDTree(const KDTree<Dim>& other);
 
     /**
@@ -166,12 +167,16 @@ class KDTree
      * @param rhs The right hand side of the assignment statement.
      * @return A reference for performing chained assignments.
      */
+    void swap(Point <Dim> &first, Point <Dim> &second);
+    int partition(int left, int right, int pivotIndex, int dimension);
+    Point <Dim> & quickselect(int start, int end, int k, int dimension);
     KDTree const &operator=(const KDTree<Dim>& rhs);
 
     /**
      * Destructor for KDTree.
      */
     ~KDTree();
+    void destroy(KDTreeNode * subroot);
 
     /**
      * Finds the closest point to the parameter point in the KDTree.
@@ -231,7 +236,8 @@ class KDTree
      * @return The closest point to a in the KDTree.
      */
     Point<Dim> findNearestNeighbor(const Point<Dim>& query) const;
-
+    Point<Dim> fNN_helper(const Point<Dim>& query, KDTreeNode * subroot, int dimension) const;
+    double radius( const Point <Dim> & firstpoint, const Point <Dim> & secondpoint) const;
     // functions used for grading:
 
     /**

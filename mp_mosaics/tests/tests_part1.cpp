@@ -58,7 +58,6 @@ TEST_CASE("KDTree::testSmallerDimVal Tests", "[weight=1][part=1]") {
   KDTree<3> tree(pts);
   Point<3> a(1, 2, 3);
   Point<3> b(3, 2, 1);
-
   REQUIRE( tree.smallerDimVal(a, b, 0) == true );
   REQUIRE( tree.smallerDimVal(a, b, 2) == false );
   REQUIRE( tree.smallerDimVal(a, b, 1) == true );   // based on operator<
@@ -116,9 +115,9 @@ TEST_CASE("KDTree constructor, 3D (Dim = 3)", "[weight=1][part=1]") {
   }
 
 
-// //
-// // Simple Nearest Neighbor
-// //
+//
+// Simple Nearest Neighbor
+//
 // template <int K>
 // void _test_linear_nearestNeighbor(int size) {
 //   vector<Point<K>> points;
@@ -185,7 +184,6 @@ TEST_CASE("KDTree::findNearestNeighbor (2D), returns correct result", "[weight=1
   std::string fname = "test_result_kdtree_"+to_string(K)+"_"+to_string(size)+".kd";
   writeKdTreeToFile(tree,fname);
   compareBinaryFiles(fname, "tests/expected_kdtree_"+to_string(K)+"_"+to_string(size)+".kd" );
-
   REQUIRE( tree.findNearestNeighbor(target) == expected );
 }
 
