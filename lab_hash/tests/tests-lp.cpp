@@ -2,7 +2,7 @@
 
 #include "../textfile.h"
 #include "../lphashtable.h"
-
+#include <iostream>
 #include <algorithm>
 #include <map>
 #include <vector>
@@ -99,6 +99,10 @@ TEST_CASE("LP::testResizeAll", "[valgrind][weight=11]")
 	for(int i = 'a'; i <= 'z'; i++) {
 		string word = "";
 		word += ((char)i);
+	// for(size_t i = 0; i < hashTable.tableSize(); i ++){
+	// 	if (hashTable[i]!= NULL)
+	// 		cout << hashTable[i]->first<< " ";
+	// }
 		if( !hashTable.keyExists(word) )
 			FAIL("Missed a key during resize: " + word);
 	}

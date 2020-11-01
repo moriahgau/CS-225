@@ -1,0 +1,5 @@
+/**
+* @file partners.txt
+* mgau2
+* gjiang20
+*/
