@@ -34,7 +34,6 @@ void DisjointSets::setunion(int a, int b){
         elems[first] = elems[second] + elems[first];    // updates first's size
         elems[second] = first;       // second points to first
     } 
-
 }
 
 int DisjointSets::size(int elem){
