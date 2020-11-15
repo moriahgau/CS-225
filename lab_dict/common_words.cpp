@@ -48,12 +48,28 @@ void CommonWords::init_file_word_maps(const vector<string>& filenames)
         // file
         vector<string> words = file_to_vector(filenames[i]);
         /* Your code goes here! */
+        map<string, unsigned int> count;
+        for ( size_t j = 0; j < words.size(); j++){
+          map<string, unsigned int>::iterator table = count.find(words[j]);
+          if (table != count.end()) {
+              table->second++;
+          }
+          else if (table == count.end()){
+              count[words[j]] = 1;
+          }
+        }
+        file_word_maps[i] = count;
     }
 }
 
-void CommonWords::init_common()
+void CommonWords::init_common() // this works
 {
     /* Your code goes here! */
+    for (size_t i = 0; i < file_word_maps.size(); i++) {
+      for(auto it = file_word_maps[i].begin(); it != file_word_maps[i].end(); it++){
+        common[it->first]++;
+      }
+    }
 }
 
 /**
@@ -61,10 +77,38 @@ void CommonWords::init_common()
  * @return A vector of strings. The vector contains all words that appear
  * in each file >= n times.
  */
-vector<string> CommonWords::get_common_words(unsigned int n) const
+vector<string> CommonWords::get_common_words(unsigned int n) const // failing
 {
     vector<string> out;
     /* Your code goes here! */
+    for (std::pair<string, unsigned int> temp : common)
+    {
+      if (temp.second == file_word_maps.size()) {
+        // for (size_t i = 0; i < file_word_maps.size(); i++) {
+        //   //file_word_maps[0] = {word1, #}, {word2, #}, {word3, #}
+        //   //file_word_maps[0].second = word
+        //   for(auto it = file_word_maps[i].begin(); it != file_word_maps[i].end(); it++){
+        //     if(it->second >=n)
+        //       out.push_back(it->first);
+        //   }
+        // }
+
+        // for(auto it = file_word_maps.begin(); it != file_word_maps.end(); it++){
+        //     if(it->second >=n)
+        //       out.push_back(it->first);
+        //   }
+        // for (size_t i = 0; i < file_word_maps.size(); i++) {
+        //   if (file_word_maps[i].at(temp.first) >= n)
+        //     out.push_back(temp.first);
+        bool toAdd = true;
+        for (auto & check: file_word_maps){
+          if(check.at(temp.first) < n)
+            toAdd = false;
+        }
+        if (toAdd)
+          out.push_back(temp.first);
+      }
+    }
     return out;
 }
 

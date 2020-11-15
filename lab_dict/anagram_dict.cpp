@@ -10,10 +10,12 @@
 
 #include <algorithm> /* I wonder why this is included... */
 #include <fstream>
+#include <vector>
 
 using std::string;
 using std::vector;
 using std::ifstream;
+using namespace std;
 
 /**
  * Constructs an AnagramDict from a filename with newline-separated
@@ -23,6 +25,17 @@ using std::ifstream;
 AnagramDict::AnagramDict(const string& filename)
 {
     /* Your code goes here! */
+    ifstream wordsFile(filename);
+    string word;
+    if (wordsFile.is_open()) {
+    /* Reads a line from `wordsFile` into `word` until the file ends. */
+      while (getline(wordsFile, word)) {
+        string temp = word;
+        std::sort(temp.begin(), temp.end());
+        dict[temp].push_back(word); //dict[word].push_back(line);
+      }
+    }
+
 }
 
 /**
@@ -32,6 +45,12 @@ AnagramDict::AnagramDict(const string& filename)
 AnagramDict::AnagramDict(const vector<string>& words)
 {
     /* Your code goes here! */
+
+    for (size_t i = 0; i < words.size(); i++) {
+      string temp = words[i];
+      std::sort(temp.begin(), temp.end());
+      dict[temp].push_back(words[i]); //dict[word].push_back(line);
+    }
 }
 
 /**
@@ -43,7 +62,12 @@ AnagramDict::AnagramDict(const vector<string>& words)
 vector<string> AnagramDict::get_anagrams(const string& word) const
 {
     /* Your code goes here! */
-    return vector<string>();
+    string temp = word;
+    std::sort(temp.begin(), temp.end());
+    if(dict.find(temp) == dict.end() || dict.at(temp).size() == 1)
+      return vector<string>();
+    return dict.at(temp);
+
 }
 
 /**
@@ -55,5 +79,11 @@ vector<string> AnagramDict::get_anagrams(const string& word) const
 vector<vector<string>> AnagramDict::get_all_anagrams() const
 {
     /* Your code goes here! */
-    return vector<vector<string>>();
+    vector<vector<string>> anagrams;
+    for (std::pair<string, vector<string>> kv : dict) {
+      if (kv.second.size() > 1) {
+        anagrams.push_back(kv.second);
+      }
+    }
+    return anagrams;
 }

@@ -14,5 +14,10 @@ class SquareMaze
     vector<int> solveMaze();
     cs225::PNG * drawMaze()const;
     cs225::PNG * drawMazeWithSolution();
-
+  private: 
+    int _width; 
+    int _height;
+    vector <int> _cells;
+    DisjointSets dset;
 };
+
