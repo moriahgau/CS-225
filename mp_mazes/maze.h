@@ -14,6 +14,7 @@ class SquareMaze
     vector<int> solveMaze();
     cs225::PNG * drawMaze()const;
     cs225::PNG * drawMazeWithSolution();
+    int getwalls(int x);
   private: 
     int _width; 
     int _height;

@@ -26,7 +26,7 @@ void DisjointSets::setunion(int a, int b){
     int second = find(b);   // find the root of b
     if (first == second)    // check if it's the same root
         return;
-    else if (elems[first] > elems[second]){ // second is larger than first
+    if (elems[first] > elems[second]){ // second is larger than first
         elems[second] = elems[second] + elems[first];   // updates second's size
         elems[first] = second;       // first points to second
     }

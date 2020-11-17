@@ -21,13 +21,13 @@ int main()
     delete unsolved;
     std::cout << "drawMaze complete" << std::endl;
 
-    std::vector<int> sol = m.solveMaze();
-    std::cout << "solveMaze complete" << std::endl;
+    // std::vector<int> sol = m.solveMaze();
+    // std::cout << "solveMaze complete" << std::endl;
 
-    cs225::PNG* solved = m.drawMazeWithSolution();
-    solved->writeToFile("solved.png");
-    delete solved;
-    std::cout << "drawMazeWithSolution complete" << std::endl;
+    // cs225::PNG* solved = m.drawMazeWithSolution();
+    // solved->writeToFile("solved.png");
+    // delete solved;
+    // std::cout << "drawMazeWithSolution complete" << std::endl;
 
     return 0;
 }
