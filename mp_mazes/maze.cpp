@@ -13,9 +13,6 @@ SquareMaze::SquareMaze(){
     _width = 0; 
     _height = 0; 
 }
-int SquareMaze::getwalls(int x){
-    return _cells[x];
-}
 void SquareMaze::makeMaze(int width,int height){
     this->_width = width;
     this->_height = height;
@@ -28,67 +25,35 @@ void SquareMaze::makeMaze(int width,int height){
     //only one path between two squares without coming back to yourself
     // 0 = no walls; 1 = rwall, | ; 2 = dwall, _; 3 = both walls, how to cover right most wall with |-? or _|? 
     dset.addelements(size);   // add elements to disjoint set
-    _cells.resize(size, 3);   // draw walls at every single cell
-    // vector <int> temp;
-    // for(int j = 0; j < size; j++){
-    //     temp[j] = j;
-    // }
-    // random seed for 
+    _rightwalls.resize(size, true);   // draw walls at every single cell
+    _bottomwalls.resize(size, true);
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     srand((time_t)ts.tv_nsec);
-    // random_shuffle(temp.begin(), temp.end()); // if change out of vector
-    // for (int i = 0; i < temp.size(); i++){ 
     // while(dset.size(0) != size){// check if everything is in one union
     int count = 0; 
-     while((count < (size-1)) && (dset.size(0) != size)){
+     while(count < size-1){
         // int i = rand() % size;  // a random cell
         int x = rand() % width; 
         int y = rand() % height; 
-        int i = x + y * width;  // a random cell
-        int randwalls = rand() % 3;  // check maze is not connected error
-        // if (randwalls == 0){ // if no walls
-        //     if((i +1 < width -1 ) && (i+width < height -1))&& (dset.find(i) != dset.find(i+1)) && (dset.find(i) != dset.find(i+width))){
-        //     // temp[i] --> i
-        //     // check out of bounds, then check same set to the right and below, i + width
-        //     dset.setunion(i, i + 1);
-        //     dset.setunion(i, i + width);
-        //     _cells[i] = 0;
-        //     }
-        // }
-        if (randwalls == 2){ // remove dwall
-            // gdb by checking each cells[i] and if it's actually being replaced
-            // whenever breakdown wall, print wall breaking down
-            if (_cells[i] == 0 || _cells[i] == 1)   // second is 2? or 1? 
-                continue;
-            // if(((i+width)/width) < _height -1) && (dset.find(i) != dset.find(i+width))))){
-            // if((i < size - width) && (dset.find(i) != dset.find(i+width))){
-            else if((y < (height -1)) && (dset.find(i) != dset.find(i+width))){
-                dset.setunion(i, i + width);
-                if (_cells[i] == 3) // if both exist 
-                    _cells[i] = 1;  // remove the dwall, theefore only rwall exists
-                else                // if only dwall
-                    _cells[i] = 0;  // then no walls
+        int i = x + y * _width; 
+        bool rwallcheck = rand()%2;  // 0 = wall doesn't exist; 1 = wall exists
+
+        if(rwallcheck == 0){  // break the dwall instead
+            if((y < height - 1) && (_bottomwalls[i] == true) && (dset.find(i) != dset.find(i+width))){
+                dset.setunion(i, i+width);
+                _bottomwalls[i] = false;
                 count++;
             }
         }
-        else if (randwalls == 1){ // remove rwall
-            if (_cells[i] == 0 || _cells[i] == 2)
-                continue;
-            //bounds, check under
-            // if((((i+1)%width) < _width -1 ) && (dset.find(i) != dset.find(i+1))){
-            // if((((i+1)% width)!= 0) && (dset.find(i) != dset.find(i+1))){
-            else if((x < (width -1)) && (dset.find(i) != dset.find(i+1))){
-                dset.setunion(i, i + 1);
-                // _cells[i] = 2;
-                if (_cells[i] == 3) // if both exist 
-                    _cells[i] = 2;  // remove the rwall, theefore only dwall exists
-                else                // if only rwall
-                    _cells[i] = 0;  // then no walls
+        else{ // wall exists, break rwall
+            if((x < width - 1) && (_rightwalls[i] == true) && (dset.find(i) != dset.find(i+1))){
+                dset.setunion(i, i+1);
+                _rightwalls[i] = false;
                 count++;
             }
         }
-    }
+     }
 
 }
 bool SquareMaze::canTravel(int x, int y, int dir) const{
@@ -96,19 +61,19 @@ bool SquareMaze::canTravel(int x, int y, int dir) const{
     // if(_width == 0 || _height == 0)
     //     return false;
     if (dir == 0){ // check rightward step
-        if(x < _width -1 && _cells[index] != 3 && _cells[index] != 1) //  rt wall?
+        if(x < _width -1 && (_rightwalls[index] == false)) //  rt wall?
             return true;
     }
     else if (dir == 1){ // check downward step
-        if(x < _height -1 && _cells[index] != 3 && _cells[index] != 2) // is this valid for array and rt wall?
+        if(y < _height -1 && (_bottomwalls[index] == false)) // is this valid for array and rt wall?
             return true;
     }
     else if (dir == 2){ // check leftward step
-        if(x > 0 && _cells[y * _width + (x-1)] != 3 && _cells[y * _width + (x-1)] != 1) // is this valid for array and rt wall?
+        if(x > 0 && (_rightwalls[y * _width + (x-1)] == false)) // is this valid for array and rt wall?
             return true;
     }
     else if (dir == 3){ // check upward step
-        if(x > 0 && _cells[(y-1) * _width + x] != 3 && _cells[(y-1) * _width + x] != 2) // is this valid for array and rt wall?
+        if(y > 0 && (_bottomwalls[(y-1) * _width + x] == false)) // is this valid for array and rt wall?
             return true;
     }
     //else
@@ -117,36 +82,78 @@ bool SquareMaze::canTravel(int x, int y, int dir) const{
 void SquareMaze::setWall(int x, int y, int dir, bool exists){
     // 0 = rwall; 1 = dwall; assuming rwall = | and dwall = _ ? 
     int index = y * _width + x;
-    if (dir == 0 && exists){ // wall exists on the right
-        if (_cells[index] == 0) // if no walls
-            _cells[index] = 1;  // add a rwall
-        else if(_cells[index] == 2) // if just a dwall
-            _cells[index] = 3;  // have both walls
+    if(dir == 0){   // right
+        _rightwalls[index] = exists;
     }
-    else if (dir == 0 && !exists){ // no wall exists on the right 
-       if (_cells[index] == 1)  //  if rwall
-            _cells[index] = 0;  //  remove rwall 
-        else if(_cells[index] == 3) // if both walls
-            _cells[index] = 2;  // only have dwall 
-    }
-    else if (dir == 1 && exists){ // wall exists on the bottom
-       if (_cells[index] == 0) // if no walls
-            _cells[index] = 2;  // add a dwall
-        else if(_cells[index] == 1) // if just a rwall
-            _cells[index] = 3;  // have both walls
-    }
-    else if (dir == 1 && !exists){
-        if (_cells[index] == 2)  //  if dwall
-            _cells[index] = 0;  //  remove dwall 
-        else if(_cells[index] == 3) // if both walls
-            _cells[index] = 1;  // only have rwall 
+    else if(dir == 1){  // bottom
+        _bottomwalls[index] = exists;
     }
 }
+// vector<int> SquareMaze::solveMaze() {
+//     int size = _width * _height;
+//   vector<int> length(size, -1); //Fill them in with temp values. Width * height = max. possible length.
+//   vector<int> path(size, 0);
+//   vector<int> previous(size, 0);
+//   queue<int> q; //For backtracking purposes.
+//   q.push(0);
+
+//   while(!q.empty()) { //Where maze solving actually happens
+//     int index = q.front();
+//     int x = index%_width;
+//     int y = index/_width;
+//     if (canTravel(x, y, 0) && length[index + 1] < 0) {
+//       length[index + 1] = length[index] + 1; //Increment length
+//       path[index + 1] = 0;
+//       previous[index + 1] = index;
+//       q.push(index + 1);
+//     }
+//     if (canTravel(x, y, 1) && length[index + _width] < 0) {
+//       length[index + _width] = length[index] + 1;
+//       path[index + _width] = 1;
+//       previous[index + _width] = index;
+//       q.push(index + _width);
+//     }
+//     if (canTravel(x, y, 2) && length[index - 1] < 0) {
+//       length[index - 1] = length[index] + 1;
+//       path[index - 1] = 2;
+//       previous[index - 1] = index;
+//       q.push(index - 1);
+//     }
+//     if (canTravel(x, y, 3) && length[index - _width] < 0) {
+//       length[index - _width] = length[index] + 1;
+//       path[index - _width] = 3;
+//       previous[index - _width] = index;
+//       q.push(index - _width);
+//     }
+//     q.pop();
+//   }
+
+//   int longestPathIndex = -1;
+//   int longestDist = -1;
+
+//   //Find the path with longest length in the last row
+//   for (int i = (_height - 1) * _width; i < _width * _height; i++) {
+//     if (length[i] > longestDist) {
+//       longestPathIndex = i;
+//       longestDist = length[i];
+//     }
+//   }
+
+//   vector<int> result;
+//   while (longestPathIndex > 0) { //Actually push the path in to vector but starts from bottom
+//     result.push_back(path[longestPathIndex]);
+//     longestPathIndex = previous[longestPathIndex];
+//   }
+
+//   reverse(result.begin(), result.end());
+
+//   return result;
+// }
 vector <int> SquareMaze::solveMaze(){
     // how to guarantee linear time check? 
-    vector<int> path(_width * _height, -1);
+    vector<int> path(_width * _height, 0);
     vector<int> visited(_width * _height, 0);
-    vector<int> pathlength(_width * _height, 0); 
+    vector<int> pathlength(_width * _height, -1); 
     std::queue <pair<int, int>> queue; // backtracking for BFS traversal
     std::queue <pair<int, int>> options;
     //int x = 0; int y = 0;   // assume starting pt to be top left
@@ -173,7 +180,7 @@ vector <int> SquareMaze::solveMaze(){
         if (canTravel(i.first % _width, i.second % _height, 1) && visited[((i.second+1)%_height) * _width + (i.first%_width)] == 0){
             path[((i.second+1)%_height) * _width + ((i.first)%_width)] = 1; // set path to left, should this just be i.first or i.first-1? 
             visited[((i.second+1)%_height) * _width + (i.first%_width)] = 1; // if visited, set to 1
-            pathlength[((i.second+1)%_height) * _width + (i.first%_width)] = pathlength[(i.second%_height) * _width + ((i.first)%_width)] +1;; // increment by 1, not sure about this
+            pathlength[((i.second+1)%_height) * _width + (i.first%_width)] = pathlength[(i.second%_height) * _width + ((i.first)%_width)] +1; // increment by 1, not sure about this
             queue.push({i.first, i.second+1});    // does this work? 
             if( (i.second+1) % _height == _height -1)
                 options.push({i.first,i.second+1}); // store another list of all valid possibilities
@@ -182,7 +189,7 @@ vector <int> SquareMaze::solveMaze(){
         if (canTravel(i.first % _width, i.second % _height, 3) && visited[((i.second-1)%_height) * _width + (i.first%_width)] == 0){
             path[((i.second-1)%_height) * _width + ((i.first)%_width)] = 3; // set path to left, should this just be i.first or i.first-1? 
             visited[((i.second-1)%_height) * _width + (i.first%_width)] = 1; // if visited, set to 1
-            pathlength[((i.second-1)%_height) * _width + (i.first%_width)] = pathlength[(i.second%_height) * _width + ((i.first)%_width)] +1;; // increment by 1, not sure about this
+            pathlength[((i.second-1)%_height) * _width + (i.first%_width)] = pathlength[(i.second%_height) * _width + ((i.first)%_width)] +1; // increment by 1, not sure about this
             queue.push({i.first, i.second-1});    // does this work? 
         }
         queue.pop();
@@ -192,7 +199,7 @@ vector <int> SquareMaze::solveMaze(){
     pair<int, int> x = options.front();
     int longestlength = pathlength[(x.second%_height) * _width + ((x.first)%_width)];
     options.pop(); 
-    while(!options.empty()){
+    while(!options.empty()){    // infinite looping here
         pair<int, int> y = options.front(); // will this hit NULl due to above pop at some point and error? 
         if (longestlength < pathlength[(y.second%_height) * _width + ((y.first)%_width)]){
             x = y;
@@ -235,7 +242,7 @@ vector <int> SquareMaze::solveMaze(){
     }
     return finalpath;
 }
-cs225::PNG * SquareMaze::drawMaze()const{
+    cs225::PNG * SquareMaze::drawMaze()const{
     cs225::PNG * themaze = new PNG(_width * 10 + 1, _height * 10 + 1); 
     // Walls on top perimeter
     for (int i = 0; i < 10 * _width + 1; i ++){   //PNG HSP l = 0; get pixel and set luminosity, this is the top, position (i, 0)
@@ -252,19 +259,19 @@ cs225::PNG * SquareMaze::drawMaze()const{
 
     for (int i = 0; i < _width; i ++){
         for (int j = 0 ;j < _height; j++){
-            if(_cells[j * _width + i] == 1){
+            if(_rightwalls[j * _width + i] == true){
                 for(int k = 0; k < 11; k++){
                     HSLAPixel & pixel = themaze->getPixel((i+1)*10,j*10+k);
                     pixel.l = 0;//darken
                 }
             }
-            else if(_cells[j * _width + i] == 2){
+            if(_bottomwalls[j * _width + i] == true){
                 for(int k = 0; k < 11; k++){
                     HSLAPixel & pixel = themaze->getPixel(i*10+k,(j+1)*10);
                     pixel.l = 0;    //darken
                 }
             }
-            else if(_cells[j * _width + i] == 3){
+            if((_rightwalls[j * _width + i] == true) && (_bottomwalls[j * _width + i] == true)){
                 for(int k = 0; k < 11; k++){
                     HSLAPixel & pixel1 = themaze->getPixel((i+1)*10,j*10+k);
                     HSLAPixel & pixel2 = themaze->getPixel(i*10+k,(j+1)*10);
@@ -274,8 +281,7 @@ cs225::PNG * SquareMaze::drawMaze()const{
             }
         }
     }
-    return themaze; // do I also need to draw the bottom perimeter? 
-    
+    return themaze; // do I also need to draw the bottom perimeter?    
 }
 cs225::PNG * SquareMaze::drawMazeWithSolution(){
     cs225::PNG * mazesolution = drawMaze();
@@ -283,50 +289,51 @@ cs225::PNG * SquareMaze::drawMazeWithSolution(){
     pair<int, int> point (5,5);
     // coloring the path red
     for (size_t i = 0; i < solution.size(); i++){
-        if (i == 0){    // R
+        if (solution[i] == 0){    // R
             for( int j = 0; j < 11; j++){
-                HSLAPixel & pixel = mazesolution->getPixel(point.first, point.second);
+                HSLAPixel & pixel = mazesolution->getPixel((point.first + j), point.second);
 				pixel.h = 0;
 				pixel.s = 1.0;
 				pixel.l = 0.5;
-				point.first++;
             }
+            point.first = point.first + 10;
         }
-        else if (i == 1){    // D
+        else if (solution[i] == 1){    // D
             for( int j = 0; j < 11; j++){
-                HSLAPixel & pixel = mazesolution->getPixel(point.first, point.second);
+                HSLAPixel & pixel = mazesolution->getPixel(point.first, (point.second+j));
 				pixel.h = 0;
 				pixel.s = 1.0;
 				pixel.l = 0.5;
-				point.second++;
             }
+            point.second = point.second + 10;
         }
-        else if (i == 2){    // L
+        else if (solution[i] == 2){    // L
             for( int j = 0; j < 11; j++){
-                HSLAPixel & pixel = mazesolution->getPixel(point.first, point.second);
+                HSLAPixel & pixel = mazesolution->getPixel((point.first-j), point.second);
 				pixel.h = 0;
 				pixel.s = 1.0;
 				pixel.l = 0.5;
-				point.first--;
             }
+            point.first = point.first -10;
         }
-        else if (i == 3){    // U
+        else if (solution[i] == 3){    // U
             for( int j = 0; j < 11; j++){
-                HSLAPixel & pixel = mazesolution->getPixel(point.first, point.second);
+                HSLAPixel & pixel = mazesolution->getPixel(point.first, (point.second-j));
 				pixel.h = 0;
 				pixel.s = 1.0;
 				pixel.l = 0.5;
-				point.first--;
             }
+            point.second = point.second -10;
         }
     }
     // getthe last cell, check this
     int x = point.first/10;
     int y = _height-1;
     // whiten the exit
-    for (int k = 0; k < 10; k++){
+    for (int k = 1; k < 10; k++){
         HSLAPixel & pixel = mazesolution->getPixel(x*10+k, (y+1)*10);    // the other coordinate part 
         pixel.l = 1;    // whiten
+        pixel.a = 1;
     }
     return mazesolution;
-};
+}

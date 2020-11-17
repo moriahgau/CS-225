@@ -18,7 +18,7 @@ class SquareMaze
   private: 
     int _width; 
     int _height;
-    vector <int> _cells;
+    vector <bool> _rightwalls;
+    vector <bool> _bottomwalls;
     DisjointSets dset;
 };
-
