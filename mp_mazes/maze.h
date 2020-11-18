@@ -8,17 +8,16 @@ class SquareMaze
 {
   public:
     SquareMaze();
-    void makeMaze(int width,int height);
-    bool canTravel(int x, int y, int dir) const;
-    void setWall(int x, int y, int dir, bool exists);
-    vector<int> solveMaze();
-    cs225::PNG * drawMaze()const;
-    cs225::PNG * drawMazeWithSolution();
-    int getwalls(int x);
+    void makeMaze(int width,int height);  // maze constructor
+    bool canTravel(int x, int y, int dir) const;  // determines if can travel a certain direction from a point
+    void setWall(int x, int y, int dir, bool exists); // sets the wall 
+    vector<int> solveMaze();  // finds the solution of the maze
+    cs225::PNG * drawMaze()const; // draws the maze
+    cs225::PNG * drawMazeWithSolution();  // draws the solution of the maze with the red lines
   private: 
-    int _width; 
-    int _height;
-    vector <bool> _rightwalls;
+    int _width; // width of the maze
+    int _height;  // height of the maze
+    vector <bool> _rightwalls;  // vectors for whether the right and/or bottom walls exist 
     vector <bool> _bottomwalls;
-    DisjointSets dset;
+    DisjointSets dset;  // disjoint set 
 };
