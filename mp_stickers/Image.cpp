@@ -177,7 +177,7 @@ void Image::scale(double factor){
 }
 
 void Image::scale(unsigned w, unsigned h){
-    Image oldImage = Image(*this);
+    // Image oldImage = Image(*this);
     // resize(w, h);
     // for (unsigned x = 0; x < w; x++) {
     //     for (unsigned y = 0; y < h; y++) {
@@ -186,8 +186,8 @@ void Image::scale(unsigned w, unsigned h){
     //         newpixel = pixel;
     //     }
     // }
-    double newx  = w/oldImage.width();
-    double newy = h/oldImage.height();
+    double newx  = (double)w/(this->width());
+    double newy = (double)h/(this->height());
     double newfactor = std::min(newx, newy);
     scale(newfactor);
     // for (unsigned x = 0; x < w; x++) {

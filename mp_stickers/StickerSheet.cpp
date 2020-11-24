@@ -53,6 +53,8 @@ const StickerSheet & StickerSheet::operator=(const StickerSheet &other){
         xposition = nullptr;
         delete yposition;
         yposition = nullptr;
+        delete[] layer;
+        layer = nullptr;
         //
         basepicture = other.basepicture;
         themax = other.themax;
