@@ -5,6 +5,7 @@
 
 #include "NimLearner.h"
 #include <ctime>
+using namespace std;
 
 
 /**
@@ -26,6 +27,29 @@
  */
 NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
     /* Your code goes here! */
+    startingVertex_ = "p1-" + to_string(startingTokens);
+    for (unsigned i = 0; i < startingTokens; i++)
+    {
+      g_.insertVertex("p1-" + to_string(i));  // will this overwrite or make two?
+      g_.insertVertex("p2-" + to_string(i));
+    }
+    unsigned currToken = startingTokens;
+    while (currToken-1 > 0) { // for loop
+      g_.insertEdge("p1-" + to_string(currToken), "p2-" + to_string(currToken-1));
+      g_.setEdgeWeight("p1-" + to_string(currToken), "p2-" + to_string(currToken-1), 0);
+      g_.insertEdge("p1-" + to_string(currToken), "p2-" + to_string(currToken-2));
+      g_.setEdgeWeight("p1-" + to_string(currToken), "p2-" + to_string(currToken-2), 0);
+      g_.insertEdge("p2-" + to_string(currToken), "p1-" + to_string(currToken-1));
+      g_.setEdgeWeight("p2-" + to_string(currToken), "p1-" + to_string(currToken-1), 0);
+      g_.insertEdge("p2-" + to_string(currToken), "p1-" + to_string(currToken-2));
+      g_.setEdgeWeight("p2-" + to_string(currToken), "p1-" + to_string(currToken-2), 0);
+      currToken--;
+    }
+    g_.insertEdge("p1-" + to_string(currToken), "p2-" + to_string(currToken-1)); //p1-1 -> p2-0
+    g_.setEdgeWeight("p1-" + to_string(currToken), "p2-" + to_string(currToken-1), 0);
+    g_.insertEdge("p2-" + to_string(currToken), "p1-" + to_string(currToken-1)); //p2-1 -> p1-0
+    g_.setEdgeWeight("p2-" + to_string(currToken), "p1-" + to_string(currToken-1), 0);
+
 }
 
 /**
@@ -40,8 +64,29 @@ NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
 std::vector<Edge> NimLearner::playRandomGame() const {
   vector<Edge> path;
  /* Your code goes here! */
+ int player = 1;
+ unsigned tokens = g_.getVertices().size()/2-1;
+ Vertex vertex = startingVertex_;
+ Vertex temp = startingVertex_;
+ while(temp != "p1-0" && temp != "p2-0"){
+    int i = rand() % 2 + 1; //# of tokens to take
+    if ( tokens == 1)
+      i = 1;
+    if (player == 1) {
+      vertex = "p2-" + to_string(tokens-i);
+      player = 2;
+    }
+    else {
+      vertex = "p1-" + to_string(tokens-i);
+      player = 1;
+    }
+    path.push_back(g_.getEdge(temp, vertex));
+    tokens = tokens - i;
+    temp = vertex;
+ }
   return path;
 }
+
 
 /*
  * Updates the edge weights on the graph based on a path through the state
@@ -61,7 +106,28 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
  /* Your code goes here! */
+ // if player 1 wins
+ if (path.back().dest == "p2-0"){
+  for(size_t i = 0; i < path.size(); i++){
+   if (i%2 == 0){
+     g_.setEdgeWeight(path[i].source, path[i].dest, g_.getEdgeWeight(path[i].source, path[i].dest)+1);
+   }
+   else
+    g_.setEdgeWeight(path[i].source, path[i].dest, g_.getEdgeWeight(path[i].source, path[i].dest)-1);
+  }
+ }
+ // if player 2 wins
+ else if (path.back().dest == "p1-0"){
+   for(size_t i = 0; i < path.size(); i++){
+     if (i%2 == 0){
+       g_.setEdgeWeight(path[i].source, path[i].dest, g_.getEdgeWeight(path[i].source, path[i].dest)-1); // -1 for player 1
+     }
+     else
+      g_.setEdgeWeight(path[i].source, path[i].dest, g_.getEdgeWeight(path[i].source, path[i].dest)+1); // +1 for player 2
+   }
+ }
 }
+
 
 /**
  * Label the edges as "WIN" or "LOSE" based on a threshold.
